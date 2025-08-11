@@ -1,0 +1,21 @@
+name: Conftest Policy Check
+
+on:
+  push:
+    paths:
+      - '**/*.json'
+      - '**/*.rego'
+  pull_request:
+
+jobs:
+  conftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Conftest
+        run: |
+          wget <https://github.com/open-policy-agent/conftest/releases/download/v0.45.0/conftest_0.45.0_Linux_x86_64.tar.gz>
+          tar -xzf conftest_0.45.0_Linux_x86_64.tar.gz
+          sudo mv conftest /usr/local/bin
+      - name: Run Conftest
+        run: conftest test bad-policy.json
